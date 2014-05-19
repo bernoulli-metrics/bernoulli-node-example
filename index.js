@@ -7,7 +7,7 @@ var bernoulli = require('bernoulli');
 
 var getSignupCopy = function(callback) {
     bernoulli.getExperiments({
-//        userId: 'user59',
+        userId: 'user59',
         experimentIds: 'signup_copy'
     }, function(experiments) {
 	console.log(experiments[0]);
@@ -27,6 +27,15 @@ var getSignupCopy = function(callback) {
 
 app.get('/', function(request, response) {
 	getSignupCopy(function(str) {
-		response.send(process.env.BERNOULLI_CLIENT_ID + '<a href="/goal">' + str + '</a>');
+		response.send('<a href="/goal">' + str + '</a>');
+	});
+});
+
+app.get('/goal', function(request, response) {
+	bernoulli.goalAttained({
+		userId: 'user59',
+		experimentId: 'signup'
+	}, function(success) {
+		response.send('goal attained');
 	});
 });
